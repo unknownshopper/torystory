@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TATO STAO // INTERACTIVE COMIC</title>
+    <style>
+        :root {
+            --comic-bg: #0a0c10;
+            --panel-bg: #11141a;
+            --panel-border: #1f293d;
+            --neon-cyan: #00f3ff;
+            --neon-green: #00ff66;
+            --neon-red: #ff3366;
+            --box-yellow: #fff200;
+            --text-dark: #000000;
+            --text-light: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--comic-bg);
+            color: var(--text-light);
+            font-family: 'Courier New', Courier, monospace;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        .comic-container {
+            width: 100%;
+            max-width: 950px;
+            height: 95vh;
+            background-color: #000;
+            border: 4px solid #fff;
+            box-shadow: 0 0 40px rgba(0, 0, 0, 0.9);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .comic-header {
+            text-align: center;
+            border-bottom: 3px solid var(--text-light);
+            padding: 15px 10px;
+            background-color: #000;
+            z-index: 10;
+        }
+
+        .comic-title {
+            font-family: 'Impact', 'Arial Black', sans-serif;
+            font-size: 32px;
+            letter-spacing: 2px;
+            color: var(--text-light);
+            text-transform: uppercase;
+        }
+
+        .viewer-viewport {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+            background-color: #050505;
+        }
+
+        .panel-slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.4s ease-in-out, visibility 0.4s ease-in-out;
+            z-index: 1;
+        }
+
+        .panel-slide.active {
+            opacity: 1;
+            visibility: visible;
+            z-index: 2;
+        }
+
+        .narration-box {
+            background-color: var(--box-yellow);
+            color: var(--text-dark);
+            padding: 8px 15px;
+            border-bottom: 4px solid #000;
+            border-right: 4px solid #000;
+            font-family: 'Impact', 'Arial Black', sans-serif;
+            text-transform: uppercase;
+            font-size: 13px;
+            letter-spacing: 0.5px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 5;
+            box-shadow: 3px 3px 0px rgba(0,0,0,0.5);
+        }
+
+              .panel-image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain; /* Respeta el formato rectangular original sin recortar costados */
+            background-color: #000000; /* Rellena con negro si sobra espacio arriba o abajo */
+            display: block;
+        }
+
+
+        .panel-image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+                 .panel-desc {
+            background: #0d1117;
+            padding: 25px 40px; /* Más espacio a los lados para que se lea como libro */
+            border-top: 4px solid #fff;
+            color: #a0aec0;
+            font-size: 14.5px; /* Un pelín más grande para mejor lectura */
+            line-height: 1.6;
+            z-index: 5;
+            flex: 0 0 auto; /* Permite que la caja use el espacio necesario abajo */
+            min-height: 140px;
+            text-align: center; /* Centra la narración principal */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .dialogue-line {
+            display: block;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px dashed #2d3748;
+            color: #ffffff;
+            width: 100%;
+            max-width: 700px; /* Mantiene el diálogo centrado y estético */
+            text-align: center; /* Centra el diálogo de Tato */
+        }
+
+        .dialogue-line strong {
+            color: var(--neon-cyan);
+            text-transform: uppercase;
+        }
+
+        .sfx {
+            font-family: 'Impact', sans-serif;
+            font-size: 38px;
+            color: var(--neon-red);
+            text-shadow: 3px 3px 0px #000;
+            position: absolute;
+            text-transform: uppercase;
+            z-index: 6;
+        }
+
+                /* Controles de Navegación minimalistas flotando a los costados */
+        .controls {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            transform: translateY(-50%);
+            display: flex;
+            justify-content: space-between;
+            padding: 0 15px;
+            pointer-events: none; /* Permite que el clic pase a la imagen si no tocas el botón */
+            z-index: 20;
+        }
+
+        .btn-nav {
+            background-color: rgba(0, 0, 0, 0.6);
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            font-family: 'Courier New', monospace;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            pointer-events: auto; /* Reactiva el clic en el botón */
+            transition: all 0.2s ease;
+            backdrop-filter: blur(4px);
+        }
+
+        .btn-nav:hover {
+            background-color: var(--neon-cyan);
+            color: #000000;
+            border-color: var(--neon-cyan);
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.6);
+        }
+
+        .btn-nav:disabled {
+            opacity: 0; /* Se esconde por completo si no hay página atrás/adelante */
+            pointer-events: none;
+        }
+
+    </style>
+</head>
+<body>
+<div class="comic-container">
+    <header class="comic-header">
+        <h1 class="comic-title">TATO STAO // CAPÍTULO 1: LA RED DE LAS SOMBRAS</h1>
+    </header>
+
+    <!-- Controles de navegación minimalistas -->
+    <div class="controls">
+        <button class="btn-nav" id="prevBtn" disabled>&lt;</button>
+        <button class="btn-nav" id="nextBtn">&gt;</button>
+    </div>
+
+
+    <!-- Visor de las Diapositivas -->
+    <div class="viewer-viewport">
+
+        <!-- SLIDE 1 -->
+        <div class="panel-slide active">
+            <div class="narration-box">CIUDAD DE MÉXICO. UN LABERINTO DE CONCRETO ASFIXIANTE DONDE ES IMPOSIBLE ENCONTRAR UN FANTASMA...</div>
+            <div class="panel-image-container">
+                <img src="img/pg01-01.jpg" alt="Vista aérea mimetizada de CDMX">
+            </div>
+            <div class="panel-desc">
+                <strong>VIÑETA 1 (Plano General Aéreo):</strong> La masividad de la urbe devora cualquier rastro técnico. El búnker operativo de Tato Stao de cuatro plantas está enterrado en el corazón de la manzana, perfectamente camuflado entre bodegas antiguas y tejados descuidados. Es una aguja en un pajar de cemento.
+            </div>
+        </div>
+
+        <!-- SLIDE 2 -->
+        <div class="panel-slide">
+            <div class="narration-box">SOBRE LAS VENAS DE ASFALTO DE LA CAPITAL...</div>
+            <div class="sfx" style="top: 40%; right: 10%; transform: rotate(8deg); color: #00f3ff;">¡¡RRRRRUUUUUMMM!!</div>
+            <div class="panel-image-container">
+                <img src="img/pg01-02.jpg" alt="HUD del casco en el segundo piso">
+            </div>
+            <div class="panel-desc">
+                <strong>VIÑETA 2 (Primera Persona / HUD):</strong> Perspectiva táctica a través del visor inteligente mientras Tato pilota la Kawasaki Ninja a toda velocidad por el Segundo Piso del Periférico. El sistema intercepta nodos viales en tiempo real.
+                <span class="dialogue-line">
+                    <strong>TATO (RADIO):</strong> "El bypass de cámaras está al 98%. Perímetro limpio. No existo para el C5."
+                </span>
+            </div>
+        </div>
+
+        <!-- SLIDE 3 -->
+        <div class="panel-slide">
+            <div class="narration-box">EL OBJETIVO ESTÁ EN LA MIRA. OPERACIÓN DE PROTECCIÓN ACTIVA.</div>
+            <div class="panel-image-container">
+                <img src="img/pg01-03.jpg" alt="Visor fijando a María Elena">
+            </div>
+            <div class="panel-desc">
+                <strong>VIÑETA 3 (Fijación de Objetivo):</strong> El visor cambia a modo de vigilancia estática. A la distancia y desde la penumbra, el software biométrico encuadra la terraza e identifica los metadatos de María Elena R. en un costado del HUD.
+            </div>
+        </div>
+
+        <!-- SLIDE 4 -->
+        <div class="panel-slide">
+            <div class="narration-box">AL OTRO LADO DE LA CALLE, EN LA PENUMBRA DE UN LOCAL VACÍO...</div>
+            <div class="sfx" style="top: 30%; left: 45%; font-size: 24px; color: #00ff66;">¡¡ZZZZZZZZ!!</div>
+            <div class="panel-image-container">
+                <img src="img/pg01-04.jpg" alt="Tato trabajando en la laptop">
+            </div>
+            <div class="panel-desc">
+                <strong>VIÑETA 4 (Plano Medio):</strong> Desde el interior de una cafetería, Tato opera su laptop militar conectada al casco. Por el ventanal se ve la Kawasaki Ninja estacionada mientras un mini-dron despega en silencio hacia las azoteas de enfrente.
+                <span class="dialogue-line" style="color: #00ff66;">
+                    <strong>TATO (PENSAMIENTO):</strong> "El mini-dron ya está arriba escaneando frecuencias aéreas... Algo no cuadra en las azoteas de enfrente."
+                </span>
+            </div>
+        </div>
+
+        <!-- SLIDE 5 -->
+        <div class="panel-slide">
+            <div class="narration-box">EL ANÁLISIS DEL DRON REVELA UN DIAGNÓSTICO CRÍTICO DEL ENTORNO...</div>
+            <div class="panel-image-container">
+                <img src="img/pg01-05.jpg" alt="Análisis satelital del dron">
+            </div>
+            <div class="panel-desc">
+                <strong>VIÑETA 5 (Vista Cenital Táctica):</strong> El mapa de la cuadrícula urbana se despliega procesado por el dron. Los algoritmos trazan vectores de escape en verde luminoso alrededor del PDI. Una alerta roja resalta el bloqueo de un callejón crucial por reparaciones viales. El margen de maniobra es mínimo.
+                <span class="dialogue-line" style="color: var(--neon-red);">
+                    <strong>SISTEMA HUD:</strong> [ALERTA: RUTA ALFA BLOQUEADA POR OBRAS URBANAS // CALLEJÓN DEL ORO CERRADO // REDIRECCIONANDO VECTORES DE EXTRACCIÓN]
+                </span>
+            </div>
+        </div>
+
+        <!-- SLIDE 6 -->
+        <div class="panel-slide">
+            <div class="narration-box">LA APARIENCIA DE CALMA ESTÁ A PUNTO DE ESTALLAR...</div>
+            <div class="panel-image-container">
+                <img src="img/pg01-06.jpg" alt="Split-screen: María Elena y Tato">
+            </div>
+            <div class="panel-desc">
+                <strong>VIÑETA 6 (Plano Compartido / Enfoque Selectivo):</strong> A través del contraste de la calle, los entornos se vuelven irrelevantes. A la izquierda, María Elena permanece en su propio mundo, sumergida en sus pensamientos en la terraza. A la derecha y bajo la penumbra del local opuesto, la silueta oculta de Tato se ilumina por el destello rojo de su laptop. El dron ha confirmado la amenaza.
+                <span class="dialogue-line" style="color: var(--neon-red);">
+                    <strong>SISTEMA HUD:</strong> [¡¡ALERTA CRÍTICA!! // SEÑAL HOSTIL DETECTADA EN LA AZOTEA SUR // VECTOR DE ATAQUE INMINENTE]
+                </span>
+            </div>
+        </div>
+
+        <!-- SLIDE 7 -->
+        <div class="panel-slide">
+            <div class="narration-box">EL TIEMPO OPERATIVO SE AGOTÓ. LA AMENAZA ESTÁ EN LA ENTRADA.</div>
+            <div class="panel-image-container">
+                <img src="img/pg01-07.jpg" alt="Celular de María Elena con alerta">
+            </div>
+            <div class="panel-desc">
+                <strong>VIÑETA 7 (Plano Detalle / Desenlace):</strong> La pantalla del smartphone de María Elena se enciende con una notificación forzada de máxima prioridad. El mensaje de Tato es directo y letalmente claro. Detrás del dispositivo, rompiendo la penumbra de la acera, los faros de dos camionetas negras blindadas avanzan de forma agresiva hacia la terraza.
+                <span class="dialogue-line" style="color: var(--neon-cyan);">
+                    <strong>TEXTO EN PANTALLA (TATO):</strong> "ESTÁN LLEGANDO POR TI. HUYE POR EL CALLEJÓN. AHORA."
+                </span>
+            </div>
+        </div>
+
+        <!-- SLIDE 8: DISTRACCIÓN EN LA ESQUINA - FINAL DE LA PÁGINA 1 -->
+        <div class="panel-slide">
+            <div class="narration-box">UN PASO ADELANTE. EL ENEMIGO GOLPEA A CIEGAS.</div>
+            <div class="panel-image-container">
+                <img src="img/pg01-08.jpg" alt="Tato y María Elena ocultos en las sombras del callejón viendo las camionetas pasar de largo hacia el café lleno de gente">
+            </div>
+            <div class="panel-desc">
+                <strong>VIÑETA 8 (Plano Medio / Final de Capítulo):</strong> El contraataque informático dio en el blanco. Protegidos por la oscuridad absoluta del callejón, Tato Stao y María Elena observan cómo el cerco táctico pasa de largo. Las camionetas blindadas aceleran hacia la otra esquina, donde el radar de Tato sembró una firma digital falsa en una concurrida cafetería abierta. El enemigo muerde el anzuelo; la retirada está libre.
+                <span class="dialogue-line" style="color: var(--neon-green);">
+                    <strong>TATO:</strong> "El señuelo funcionó... se dirigen al café de la otra esquina. Vámonos de aquí antes de que noten el engaño."
+                </span>
+            </div>
+        </div>
+
+
+
+    </div>
+</div>
+<script>
+    const slides = document.querySelectorAll('.panel-slide');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    let currentSlide = 0;
+
+    // Variables para el soporte de gestos táctiles en móvil
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    function updateSlides() {
+        slides.forEach((slide, index) => {
+            if (index === currentSlide) {
+                slide.classList.add('active');
+            } else {
+                slide.classList.remove('active');
+            }
+        });
+
+        // Muestra/Oculta flechas según la posición
+        prevBtn.disabled = currentSlide === 0;
+        nextBtn.disabled = currentSlide === slides.length - 1;
+    }
+
+    // Funciones de navegación
+    function nextSlide() {
+        if (currentSlide < slides.length - 1) {
+            currentSlide++;
+            updateSlides();
+        }
+    }
+
+    function prevSlide() {
+        if (currentSlide > 0) {
+            currentSlide--;
+            updateSlides();
+        }
+    }
+
+    // Eventos de botones flotantes
+    nextBtn.addEventListener('click', nextSlide);
+    prevBtn.addEventListener('click', prevSlide);
+
+    // Soporte para flechas del teclado
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight') nextSlide();
+        if (e.key === 'ArrowLeft') prevSlide();
+    });
+
+    // Soporte Táctil (Swipe) para Celulares
+    const viewport = document.querySelector('.viewer-viewport');
+
+    viewport.addEventListener('touchstart', (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+
+    viewport.addEventListener('touchend', (e) => {
+        touchEndX = e.changedTouches[0].screenX;
+        handleSwipe();
+    }, { passive: true });
+
+    function handleSwipe() {
+        const swipeDistance = touchStartX - touchEndX;
+        const minSwipeThreshold = 50; // Pixels mínimos para detectar el movimiento
+
+        if (swipeDistance > minSwipeThreshold) {
+            // Deslizó hacia la izquierda -> Siguiente viñeta
+            nextSlide();
+        } else if (swipeDistance < -minSwipeThreshold) {
+            // Deslizó hacia la derecha -> Viñeta anterior
+            prevSlide();
+        }
+    }
+</script>
+
+
+</body>
+</html>

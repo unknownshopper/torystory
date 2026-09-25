@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TATO STAO // INTERACTIVE COMIC</title>
+    <style>
+        :root {
+            --comic-bg: #0a0c10;
+            --panel-bg: #11141a;
+            --panel-border: #1f293d;
+            --neon-cyan: #00f3ff;
+            --neon-green: #00ff66;
+            --neon-red: #ff3366;
+            --box-yellow: #fff200;
+            --text-dark: #000000;
+            --text-light: #ffffff;
+            --text-muted: #8b93a7;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--comic-bg);
+            color: #c5c9db;
+            font-family: 'Courier New', Courier, monospace;
+            line-height: 1.6;
+        }
+
+        /* ============ HERO DE BIENVENIDA ============ */
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            overflow: hidden;
+            background: url('img/pg01-01.jpg') center / cover no-repeat;
+        }
+
+        .hero::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(10, 12, 16, 0.88) 0%, rgba(10, 12, 16, 0.6) 50%, var(--comic-bg) 100%);
+            z-index: 1;
+        }
+
+        /* Líneas de escaneo estilo monitor táctico */
+        .hero::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.22) 0px, rgba(0, 0, 0, 0.22) 2px, transparent 2px, transparent 4px);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            padding: 40px 20px;
+            max-width: 920px;
+        }
+
+        .hero-status {
+            color: var(--neon-green);
+            letter-spacing: 3px;
+            font-size: 13px;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+
+        .hero-status .cursor {
+            animation: blink 1s step-end infinite;
+        }
+
+        @keyframes blink {
+            0%, 49% { opacity: 1; }
+            50%, 100% { opacity: 0.3; }
+        }
+
+        .hero-title {
+            font-family: 'Impact', 'Arial Black', sans-serif;
+            font-size: clamp(56px, 12vw, 130px);
+            letter-spacing: 8px;
+            line-height: 1;
+            color: var(--text-light);
+            text-transform: uppercase;
+            text-shadow: 0 0 25px rgba(0, 243, 255, 0.45), 5px 5px 0 rgba(0, 243, 255, 0.55);
+        }
+
+        .hero-title span {
+            color: var(--neon-cyan);
+        }
+
+        .hero-subtitle {
+            display: inline-block;
+            background-color: var(--box-yellow);
+            color: var(--text-dark);
+            font-family: 'Impact', 'Arial Black', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: clamp(13px, 2vw, 17px);
+            padding: 8px 18px;
+            margin: 25px 0 15px;
+            box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.6);
+        }
+
+        .hero-tagline {
+            color: #aab3c5;
+            max-width: 640px;
+            margin: 15px auto 40px;
+            font-size: 15px;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 18px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            font-family: 'Impact', 'Arial Black', sans-serif;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            text-decoration: none;
+            padding: 14px 32px;
+            font-size: 16px;
+            border: 3px solid var(--neon-cyan);
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: var(--neon-cyan);
+            color: var(--text-dark);
+            box-shadow: 6px 6px 0 rgba(0, 243, 255, 0.25);
+        }
+
+        .btn-primary:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 9px 9px 0 rgba(0, 243, 255, 0.4);
+        }
+
+        .btn-ghost {
+            background: rgba(0, 0, 0, 0.45);
+            color: var(--text-light);
+            border-color: var(--text-light);
+        }
+
+        .btn-ghost:hover {
+            border-color: var(--neon-green);
+            color: var(--neon-green);
+            box-shadow: 0 0 15px rgba(0, 255, 102, 0.35);
+        }
+
+        .scroll-cue {
+            position: absolute;
+            bottom: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: var(--neon-cyan);
+            font-size: 22px;
+            z-index: 2;
+            animation: bounce 1.6s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translate(-50%, 0); }
+            50% { transform: translate(-50%, 10px); }
+        }
+
+        /* ============ ARCHIVOS DE ACCESO ============ */
+        .archivos {
+            padding: 80px 20px 30px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-family: 'Impact', 'Arial Black', sans-serif;
+            color: var(--text-light);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            font-size: 26px;
+            border-bottom: 3px solid var(--neon-cyan);
+            padding-bottom: 12px;
+            margin-bottom: 35px;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            display: block;
+            text-decoration: none;
+            background: var(--panel-bg);
+            border: 2px solid var(--panel-border);
+            border-top: 4px solid var(--neon-cyan);
+            padding: 25px;
+            transition: all 0.2s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-top-color: var(--neon-green);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.6);
+        }
+
+        .card-meta {
+            color: var(--neon-green);
+            font-size: 11px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .card h3 {
+            font-family: 'Impact', 'Arial Black', sans-serif;
+            color: var(--neon-cyan);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .card:hover h3 {
+            color: var(--neon-green);
+        }
+
+        .card p {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        /* ============ DOSSIER ============ */
+        #dossier {
+            padding: 60px 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            border: 1px solid var(--neon-green);
+            padding: 30px;
+            box-shadow: 0 0 15px rgba(0, 255, 102, 0.2);
+        }
+        h1 {
+            color: var(--neon-green);
+            text-transform: uppercase;
+            border-bottom: 2px solid var(--neon-green);
+            padding-bottom: 10px;
+            text-shadow: 0 0 5px rgba(0, 255, 102, 0.5);
+        }
+        h2 {
+            color: var(--neon-cyan);
+            margin-top: 30px;
+            border-bottom: 1px dashed var(--neon-cyan);
+        }
+        .highlight {
+            color: #ffffff;
+            font-weight: bold;
+        }
+        ul {
+            list-style-type: square;
+        }
+        li {
+            margin-bottom: 10px;
+        }
+        .floor-plan {
+            background-color: #161a22;
+            border-left: 4px solid var(--neon-cyan);
+            padding: 15px;
+            margin-top: 15px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px 20px;
+            border-top: 1px solid var(--panel-border);
+            color: var(--text-muted);
+            font-size: 12px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+
+<!-- ============ HERO DE BIENVENIDA ============ -->
+<header class="hero">
+    <div class="hero-content">
+        <p class="hero-status">// Sistema en línea — Acceso autorizado <span class="cursor">_</span></p>
+        <h1 class="hero-title">TATO <span>STAO</span></h1>
+        <p class="hero-subtitle">Interactive Comic // Capítulo 1: La Red de las Sombras</p>
+        <p class="hero-tagline">
+            Bienvenido a la red. En los márgenes de la infraestructura digital de la Ciudad de México,
+            un fantasma sin identidad protege a quienes el sistema dio por perdidos.
+            Despliega el visor y entra a la sombra.
+        </p>
+        <div class="hero-actions">
+            <a href="pg01.html" class="btn btn-primary">&gt; Comenzar lectura</a>
+            <a href="#archivos" class="btn btn-ghost">Ver archivos</a>
+        </div>
+    </div>
+    <div class="scroll-cue">&#9660;</div>
+</header>
+
+<!-- ============ ARCHIVOS DE ACCESO ============ -->
+<section id="archivos" class="archivos">
+    <h2 class="section-title">// Archivos de acceso</h2>
+    <div class="cards">
+        <a class="card" href="pg01.html">
+            <div class="card-meta">Página 01 // 8 viñetas</div>
+            <h3>Cómic Interactivo</h3>
+            <p>Capítulo 1: La Red de las Sombras. La operación de protección a María Elena comienza. Navega con las flechas, el teclado o swipe en móvil.</p>
+        </a>
+        <a class="card" href="capitulo1.html">
+            <div class="card-meta">Operación: Sombra Cero</div>
+            <h3>Guión Técnico</h3>
+            <p>El documento argumental completo detrás del primer capítulo: secuencias, HUD, diálogos y notas visuales.</p>
+        </a>
+        <a class="card" href="#dossier">
+            <div class="card-meta">Reporte de inteligencia</div>
+            <h3>Dossier del Sujeto</h3>
+            <p>Perfil completo de Tato Stao: mimetismo urbano, la Kawasaki "Obsidian" y los cuatro pisos del Bastión Estructural.</p>
+        </a>
+    </div>
+</section>
+
+<!-- ============ DOSSIER ============ -->
+<section id="dossier">
+<div class="container">
+    <h1>REPORTE DE INTELIGENCIA: Tato Stao</h1>
+    <p><strong>ESTADO:</strong> ACTIVO | <strong>AMENAZA:</strong> CRÍTICA | <strong>IDENTIDAD:</strong> PURGADA</p>
+
+    <h2>1. Trasfondo General</h2>
+    <p>El sujeto conocido como <span class="highlight">Tato Stao</span> opera en los márgenes de la infraestructura digital global. No existe registro civil, bancario o gubernamental que confirme su nacimiento. Su filosofía dicta que el software ineficiente es una vulnerabilidad existencial; por ello, programa herramientas personalizadas en lenguajes de bajo nivel, ejecutando ataques con la precisión quirúrgica de un verdugo.</p>
+
+    <h2>2. Apariencia y Mimetismo Urbano</h2>
+    <p>A diferencia de los mitos cibernéticos, Tato Stao no utiliza disfraces llamativos. Su estrategia se basa en la normalidad absoluta para mezclarse con la multitud, apoyado por tecnología textil táctica:</p>
+    <ul>
+        <li><span class="highlight">Textiles Anti-Flash:</span> Camisas y sudaderas equipadas con polímeros reflectantes que saturan los sensores ópticos de las cámaras de seguridad al recibir un destello o luz directa, difuminando su silueta.</li>
+        <li><span class="highlight">Accesorios de Disrupción:</span> Uso cotidiano de gafas oscuras polarizadas, gorras y hoodies que bloquean los puntos de referencia faciales. Los algoritmos de reconocimiento biométrico lo clasifican como un "error de lectura".</li>
+        <li><span class="highlight">Perfil Bajo:</span> Capaz de transitar por zonas ejecutivas o distritos comerciales sin levantar sospechas, aparentando ser un ciudadano común hasta el momento de desaparecer en las sombras.</li>
+    </ul>
+
+    <h2>3. Vehículo Operativo: Kawasaki Ninja "Obsidian"</h2>
+    <p>Su principal vector de movilidad terrestre es una <span class="highlight">Kawasaki Ninja</span> modificada para la guerra electrónica:</p>
+    <ul>
+        <li><span class="highlight">Fuselaje Absorbente:</span> Revestimiento que minimiza la firma de radar y suprime los reflejos lumínicos.</li>
+        <li><span class="highlight">Emisor EMP:</span> Dispositivo capaz de deshabilitar temporalmente cámaras de tránsito y nodos de vigilancia en un radio estrecho.</li>
+        <li><span class="highlight">Transceptor Móvil:</span> Permite la infiltración remota en redes inalámbricas urbanas a altas velocidades.</li>
+    </ul>
+
+    <h2>4. Estilo de Combate Digital</h2>
+    <p>Su metodología de hackeo es ofensiva y de ejecución inmediata. Emplea vulnerabilidades de día cero (*Zero-Days*) desarrolladas por él mismo. Su intrusión en sistemas de alta seguridad es limpia, veloz y letal para las defensas corporativas, emulando la letalidad de una katana.</p>
+
+    <h2>5. Centro de Poder: El Bastión Estructural</h2>
+    <p>Tato Stao opera desde un edificio fortificado de cuatro plantas bajo su propiedad exclusiva. El inmueble funciona como un búnker de alta tecnología camuflado en la arquitectura urbana:</p>
+
+    <div class="floor-plan">
+        <h3>Piso 4: Penthouse (Residencia Privada y Estudio)</h3>
+        <p>El último nivel está diseñado con un estilo minimalista, lujoso y funcional ("mamón"). Cuenta con habitación principal, sala de estar, comedor y un estudio de desarrollo de código de acceso restringido. Destaca su <span class="highlight">terraza perimetral en V</span> que abarca dos caras del edificio, ofreciendo una vista panorámica estratégica de la ciudad y facilitando rutas de escape visual o despliegue de drones.</p>
+    </div>
+
+    <div class="floor-plan">
+        <h3>Piso 3: Núcleo de Operaciones y Servidores</h3>
+        <p>El corazón técnico del complejo. Aloja un salón de pruebas de hardware, racks de servidores blade refrigerados por líquido y estaciones de trabajo multi-monitor con aislamiento electromagnético (Jaula de Faraday). Aquí se compila el código y se ejecutan las simulaciones de ataque.</p>
+    </div>
+
+    <div class="floor-plan">
+        <h3>Piso 2: Sala de Juntas y Logística</h3>
+        <p>Centro de mando táctico equipado con pantallas modulares de última generación, sistemas de comunicación satelital encriptada y mesas táctiles para planeación de operaciones. Diseñado para coordinar acciones complejas o analizar datos masivos en tiempo real.</p>
+    </div>
+
+    <div class="floor-plan">
+        <h3>Piso 1: Acceso Automático y Garaje</h3>
+        <p>La planta baja cuenta con una <span class="highlight">compuerta automatizada reforzada</span> de apertura rápida. Tato Stao ingresa directamente desde la calle a bordo de su Kawasaki Ninja sin detener la marcha. El garaje alberga múltiples vehículos modificados para diferentes entornos operativos. Un elevador industrial de alta capacidad conecta este nivel directamente con el Penthouse, permitiendo subir el vehículo si la situación lo requiere.</p>
+    </div>
+</div>
+</section>
+
+<footer>
+    Tato Stao // Interactive Comic &mdash; Proyecto alojado en GitHub
+</footer>
+
+</body>
+</html>

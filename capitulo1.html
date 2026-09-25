@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guión Técnico - Operación: Sombra Cero</title>
+    <style>
+        :root {
+            --bg-color: #0a0c10;
+            --panel-bg: #121620;
+            --neon-green: #00ff66;
+            --neon-cyan: #00f3ff;
+            --text-main: #d1d5db;
+            --text-muted: #6b7280;
+            --accent-red: #ff3366;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Courier New', Courier, monospace;
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .script-container {
+            max-width: 850px;
+            width: 100%;
+            background-color: var(--panel-bg);
+            border: 1px solid #222c3f;
+            border-radius: 8px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+        }
+
+        header {
+            border-bottom: 2px solid var(--neon-cyan);
+            padding-bottom: 20px;
+            margin-bottom: 40px;
+        }
+
+        .title {
+            color: var(--neon-cyan);
+            font-size: 28px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin: 0 0 10px 0;
+        }
+
+        .meta-info {
+            display: flex;
+            justify-content: space-between;
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        .slugline {
+            color: #ffffff;
+            font-weight: bold;
+            background-color: #1a2333;
+            padding: 8px 12px;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            border-left: 4px solid var(--neon-green);
+            text-transform: uppercase;
+        }
+
+        .action {
+            margin-bottom: 20px;
+            text-align: justify;
+            line-height: 1.6;
+        }
+
+        .dialogue-block {
+            margin: 20px auto;
+            max-width: 450px;
+            text-align: left;
+        }
+
+        .character {
+            color: var(--neon-green);
+            font-weight: bold;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 2px;
+        }
+
+        .parenthetical {
+            color: var(--text-muted);
+            font-style: italic;
+            text-align: center;
+            font-size: 13px;
+            margin-bottom: 4px;
+        }
+
+        .dialogue {
+            color: #ffffff;
+            text-align: left;
+            line-height: 1.4;
+        }
+
+        .system-alert {
+            background-color: rgba(255, 51, 102, 0.1);
+            border: 1px solid var(--accent-red);
+            color: var(--accent-red);
+            padding: 12px;
+            margin: 20px 0;
+            font-size: 14px;
+            border-radius: 4px;
+        }
+
+        .ui-note {
+            color: var(--neon-cyan);
+            font-size: 13px;
+            background: rgba(0, 243, 255, 0.05);
+            padding: 10px;
+            border-radius: 4px;
+            margin: 15px 0;
+        }
+
+        .transition {
+            text-align: right;
+            font-weight: bold;
+            color: var(--text-muted);
+            margin: 30px 0;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+
+<div class="script-container">
+    <header>
+        <div class="title">TATO STAO: SOMBRA CERO</div>
+        <div class="meta-info">
+            <span>FORMATO: Guión Técnico / Argumental</span>
+            <span>AUTOR: IA / Colaboración</span>
+        </div>
+    </header>
+
+    <!-- SECUENCIA 1 -->
+    <div class="slugline">EXT. LABERINTO URBANO - CDMX - NOCHE</div>
+    <div class="action">
+        Una toma aérea de dron desciende sobre el corazón de una manzana asfixiada en una zona popular de la Ciudad de México. Edificios antiguos, reforzados con estructuras industriales y destinados a bodegas operativas, se aglomeran creando una muralla natural e impenetrable. Abajo, en los claustrofóbicos callejones de un solo carril, las luces de los autos dejan estelas rojizas y blancas debido a la velocidad. No hay avenidas. Entre la penumbra, destaca un único edificio de cuatro plantas empotrado a mitad de cuadra. Líneas de neón cian delinean sus bordes arquitectónicos. En el techo, sobre un tragaluz encendido, brilla el símbolo luminoso: <span style="color: var(--neon-cyan); font-weight: bold;">=</span>.
+    </div>
+
+    <div class="transition">CORTE A:</div>
+
+    <!-- SECUENCIA 2 -->
+    <div class="slugline">EXT. SEGUNDO PISO DEL PERIFÉRICO - NOCHE</div>
+    <div class="action">
+        La silueta de una motocicleta KAWASAKI NINJA ruge por el asfalto mojado, rebasando vehículos a gran velocidad.
+    </div>
+    <div class="action">
+        INTERFAZ DEL CASCO (HUD): El visor digital muestra líneas horizontales que escanean los postes de fotomultas y arcos carreteros. Un indicador digital parpadea en la esquina superior: <span style="color: var(--neon-cyan);">"TRAFFIC_CAM_BYPASS: 98%"</span>. El entorno se tiñe de filtros tácticos azules. La velocidad de la moto se procesa en un velocímetro holográfico mientras los algoritmos del casco limpian el rastro digital del conductor en tiempo real.
+    </div>
+
+    <div class="transition">CORTE A:</div>
+
+    <!-- SECUENCIA 3 -->
+    <div class="slugline">INT. CAFETERÍA OSCURA - NOCHE</div>
+    <div class="action">
+        TATO STAO se encuentra sentado en una mesa de madera profunda al fondo del local. Viste una sudadera técnica oscura con capucha y una gorra que bloquea las luces del techo. En la mesa reposa su CASCO TÁCTICO, apagado pero conectado mediante un grueso cable trenzado a una LAPTOP militar de alta resistencia. 
+    </div>
+    <div class="action">
+        A través del enorme ventanal de la cafetería, se observa la acera de enfrente. Estacionada bajo una farola tenue está la Kawasaki Ninja. De su carenado delantero se desprende un MINI-DRON silencioso que se eleva verticalmente hacia la noche de la CDMX.
+    </div>
+    <div class="action">
+        Tato desliza sus dedos enguantados sobre el teclado de la laptop. En la pantalla se despliega el mapa vectorial de la zona, espectros de radiofrecuencia (RF) balanceándose, y una transmisión de video en vivo.
+    </div>
+
+    <div class="ui-note">
+        <strong>NOTA VISUAL EN PANTALLA DE LAPTOP:</strong> El recuadro principal enfoca la acera opuesta. MARÍA ELENA R. está sentada en la terraza de otra cafetería conversando con una acompañante. Un cuadro de fijación biométrica parpadea sobre su rostro: <span style="color: var(--neon-green);">"TARGET FOUND: María Elena R. (CONFIRMED 94.3%)"</span>. Una cascada de datos de metadatos se desborda al lado de su fotografía de perfil.
+    </div>
+
+    <div class="dialogue-block">
+        <div class="character">Tato Stao</div>
+        <div class="parenthetical">(Voz baja, analizando los flujos de red en la pantalla)</div>
+        <div class="dialogue">Fijada. El perímetro de red está limpio, María Elena. Veamos quién más está escuchando esta frecuencia...</div>
+    </div>
+
+    <div class="action">
+        El mini-dron alcanza los 20 metros de altura sobre la calle estrecha, enviando lecturas térmicas del entorno directo a la laptop de Tato. Las barras de espectro RF comienzan a saturarse súbitamente cerca de las azoteas colindantes al café de María Elena.
+    </div>
+
+    <div class="system-alert">
+        <strong>ALERTA DE SISTEMA:</strong> DISRUPCIÓN DE SEÑAL DETECTADA - FRECUENCIA ENCRIPTADA NO IDENTIFICADA EN AZOTEA SUR. POSIBLE VECTOR DE AMENAZA / LÍNEA DE VISIÓN DIRECTA HACIA EL OBJETIVO.
+    </div>
+
+    <div class="action">
+        Tato interrumpe su lectura de metadatos. Sus ojos, ocultos tras unas gafas oscuras, se clavan en la alerta roja de la laptop. Sus dedos teclean código a una velocidad impresionante; cada comando se ejecuta con una precisión filosa y letal.
+    </div>
+
+    <div class="dialogue-block">
+        <div class="character">Tato Stao</div>
+        <div class="parenthetical">(Tecleando de forma agresiva)</div>
+        <div class="dialogue">Interceptando señal saliente... No en mi guardia. Desplegando contramedidas electrónicas desde el búnker.</div>
+    </div>
+
+    <div class="action">
+        En la pantalla, el mapa de la manzana se actualiza. Desde el búnker central con el signo <span style="color: var(--neon-cyan); font-weight: bold;">=</span> (ubicado a solo tres cuadras por los callejones internos), un servidor esclavo redirige un ataque de denegación de servicio hacia la frecuencia intrusa.
+    </div>
+
+    <div class="action">
+        Tato cierra la laptop con un golpe seco, desconecta el cable del casco con un movimiento fluido y se lo coloca en la cabeza. El visor se enciende instantáneamente con el mapa de escape hacia su edificio. Se levanta de la mesa, dejando unos billetes, y avanza hacia la salida de la cafetería con paso firme y calculado. Afuera, los faros de la Kawasaki Ninja se encienden de forma automática. La cacería y la protección han comenzado.
+    </div>
+
+    <div class="transition">FADE OUT.</div>
+</div>
+
+</body>
+</html>
